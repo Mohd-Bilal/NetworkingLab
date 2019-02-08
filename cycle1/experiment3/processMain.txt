@@ -1,0 +1,8 @@
+PROCEDURE MAIN()
+1: BEGIN
+2: THREADNO <- fork()
+3: THREAD1 <- thread(THREAD_CALLBACK,THREADNO)
+4: THREAD2 <- thread(THREAD_CALLBACK,THREADNO)
+5: wait for THREAD1 to exit
+6: wait for THREAD2 to exit
+7: EXIT

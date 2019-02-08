@@ -1,0 +1,7 @@
+PROCEDURE THREAD_CALLBACK( ID )
+1: BEGIN
+2: if ID == 0 then
+3: print "This thread was created by child and thread id is " and thread_id
+4: else
+5: print "This thread was created by parent and thread id is " and thread_id
+6: end
