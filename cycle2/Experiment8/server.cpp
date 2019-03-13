@@ -15,9 +15,15 @@ void communicator(int sockfd){
     memset(&cliaddr, 0, sizeof(cliaddr)); 
     char buffer[MAXLINE],serverMessage[MAXLINE]; 
     for(;;){
+	memset(buffer,0,sizeof(buffer));
 	n = recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, ( struct sockaddr *) &cliaddr, (socklen_t *)&len); 
-	// buffer[n] = '\0'; 
 	printf("Client : %s\n", buffer); 
+	if(strcmp(buffer,"exit") == 0){
+		printf("Server exiting \n");
+		exit(0);
+	}
+	memset(serverMessage,0,sizeof(serverMessage));
+
     scanf("%s",serverMessage);
 	sendto(sockfd, (char *)&serverMessage, strlen(serverMessage), MSG_CONFIRM, (const struct sockaddr *) &cliaddr, len); 
 	printf("Client message sent.\n");
@@ -29,8 +35,8 @@ int main() {
 	struct sockaddr_in servaddr; 
 	
 	if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
-		perror("socket creation failed"); 
-		exit(EXIT_FAILURE); 
+		printf("socket creation failed"); 
+		exit(0); 
 	} 
 	
 	memset(&servaddr, 0, sizeof(servaddr)); 
@@ -43,8 +49,8 @@ int main() {
 	if ( bind(sockfd, (const struct sockaddr *)&servaddr, 
 			sizeof(servaddr)) < 0 ) 
 	{ 
-		perror("bind failed"); 
-		exit(EXIT_FAILURE); 
+		printf("bind failed"); 
+		exit(0); 
 	} 
 	
 	communicator(sockfd);

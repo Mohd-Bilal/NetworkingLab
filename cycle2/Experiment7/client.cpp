@@ -14,13 +14,14 @@ void communicator(int sockfd){
         memset(buffer,0,MAX);
         scanf("%s",buffer);
         write(sockfd,buffer,sizeof(buffer));
-        memset(buffer,0,MAX);
-        read(sockfd,buffer,sizeof(buffer));
-        printf("Server says : %s",buffer);
         if(strcmp(buffer,"exit")== 0){
             printf("Client exiting \n");
             break;
         }
+        memset(buffer,0,MAX);
+        read(sockfd,buffer,sizeof(buffer));
+        printf("Server says : %s",buffer);
+        
     }
 }
 

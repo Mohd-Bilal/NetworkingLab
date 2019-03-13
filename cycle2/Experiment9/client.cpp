@@ -14,6 +14,12 @@
 
 #define PORT 8080
 #define MAX 1024
+
+struct message{
+    char buffer[MAX];
+    int messagerId;
+};
+typedef struct message message;
 int main(){
     int socketfd;
     struct sockaddr_in server;
@@ -41,11 +47,12 @@ int main(){
     write(socketfd,buffer,sizeof(buffer));
     printf("Data send to server!\n");
     if(strcmp(buffer,"exit") == 0){
-        printf("Client #%d exiting...\n",socketfd);
+        printf("Client exiting...\n",socketfd);
         break;
     }
-    read(socketfd,buffer,sizeof(buffer));
-    printf("Server says : %s\n",buffer);
+    message serverM;
+    read(socketfd,(void *)&serverM,sizeof(serverM));
+    printf("Client #%d says : %s\n",serverM.messagerId,serverM.buffer);
 
     }
     close(socketfd);

@@ -17,15 +17,23 @@
 using namespace std;
 vector<int> socketList;
 
+struct message{
+    char buffer[MAX];
+    int messagerId;
+};
+typedef struct message message;
 void *userCallBack( void * socketfd){
     char buffer[MAX];
     char serverMessage[] = "Welcome to MUCS! \nEnjoy your stay !\n";
     for(;;){
     int n = read((long)socketfd,buffer,sizeof(buffer));
     printf("Client #%d: %s\n",socketfd,buffer);
+    message clientM;
+    strcpy(clientM.buffer,buffer);
+    clientM.messagerId = (long)socketfd;
     for(int i = 0;i<socketList.size();i++){
         if(socketList[i] != (long)socketfd){
-            write(socketList[i],buffer,sizeof(buffer));
+            write(socketList[i],(void *)&clientM,sizeof(clientM));
         }
     }
     if(strcmp(buffer,"exit") == 0)

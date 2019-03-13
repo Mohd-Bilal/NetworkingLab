@@ -23,10 +23,14 @@ void communicator(int sockfd){
         scanf("%s",clientMessage);
 	    sendto(sockfd, (const char *)clientMessage, strlen(clientMessage), MSG_CONFIRM, (const struct sockaddr *) &servaddr,sizeof(servaddr)); 
 	    printf("Client message sent.\n"); 
+		if(strcmp(clientMessage,"exit") == 0){
+			printf("Client exiting \n");
+			exit(0);
+		}
 	    n = recvfrom(sockfd, (char *)buffer, MAXLINE,MSG_WAITALL, (struct sockaddr *) &servaddr,(socklen_t *)&len); 
 	    buffer[n] = '\0'; 
 	    printf("Server : %s\n", buffer); 
-
+		
     }
 }
 

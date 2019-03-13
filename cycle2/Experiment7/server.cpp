@@ -16,12 +16,13 @@ void communicator(int connfd){
         memset(buffer,0,MAX);
         read(connfd,buffer,sizeof(buffer));
         
-        printf("Client says : %s \n Server says : ",buffer);
+        printf("Client says : %s \n",buffer);
         if(strcmp(buffer,"exit") == 0){
             printf("Server exiting..... \n");
             break;
         }
         memset(buffer,0,MAX);
+        printf("Server says : ");
         scanf("%s",buffer);
         write(connfd,buffer,sizeof(buffer));
         
@@ -50,7 +51,7 @@ int main(){
         exit(0);
     }
     printf("Socket binding successful !\n");
-    if(listen(socketfd,5)){
+    if(listen(socketfd,5) < 0){
         printf("Listen failed !\n");
         exit(0);
     }
