@@ -1,39 +1,53 @@
+////////////////////////////////////////////////
+//                                            //
+//     Client for MultiUserChat Server        //
+//                                            //
+////////////////////////////////////////////////
 #include<sys/socket.h>
 #include<sys/types.h>
-#include<stdio.h>
-#include<stdlib.h>
 #include<arpa/inet.h>
 #include<netinet/in.h>
+#include<stdio.h>
+#include<stdlib.h>
 #include<unistd.h>
 #include<string.h>
 
 #define PORT 8080
 #define MAX 1024
-
-void communicator(int socketfd){
-    char inp_buffer[MAX],out_buffer[MAX];
-    struct sockaddr_in server;
-
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons(PORT);
-
-    strcpy(out_buffer,"now");
-    sendto(socketfd,out_buffer,strlen(out_buffer),MSG_CONFIRM,(sockaddr *)&server,sizeof(server));
-    int n,len;
-    memset(inp_buffer,0,sizeof(inp_buffer));
-    n = recvfrom(socketfd,inp_buffer,MAX,MSG_WAITALL,(sockaddr *)&server,(socklen_t *)&len);
-    printf("Server: %s\n",inp_buffer);
-
-}
 int main(){
     int socketfd;
-    socketfd = socket(AF_INET,SOCK_DGRAM,0);
-    if(socketfd<0){
+    struct sockaddr_in server;
+    memset(&server,0,sizeof(server));
+    socketfd = socket(AF_INET,SOCK_STREAM,0);
+    if(socketfd < 0){
         printf("Socket creation failed !\n");
         exit(0);
     }
     printf("Socket creation successful !\n");
-    communicator(socketfd);
+
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_family = AF_INET;
+    server.sin_port = htons(PORT);
+
+    if(connect(socketfd,(sockaddr *)&server,sizeof(server))!= 0){
+        printf("Connection failed \n");
+        exit(0);
+    }
+    printf("Connection successful !\n");
+    char buffer[MAX];
+    for(;;){
+    scanf("%s",buffer);
+    
+    write(socketfd,buffer,sizeof(buffer));
+    printf("Data send to server!\n");
+    if(strcmp(buffer,"exit") == 0){
+        printf("Client #%d exiting...\n",socketfd);
+        break;
+    }
+    read(socketfd,buffer,sizeof(buffer));
+    printf("Server says : %s\n",buffer);
+
+    }
+    close(socketfd);
     return 0;
 }
