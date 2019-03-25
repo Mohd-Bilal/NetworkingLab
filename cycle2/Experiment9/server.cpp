@@ -24,7 +24,6 @@ struct message{
 typedef struct message message;
 void *userCallBack( void * socketfd){
     char buffer[MAX];
-    char serverMessage[] = "Welcome to MUCS! \nEnjoy your stay !\n";
     for(;;){
     int n = read((long)socketfd,buffer,sizeof(buffer));
     printf("Client #%d: %s\n",socketfd,buffer);
