@@ -1,0 +1,269 @@
+\documentclass{article}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{color}
+\usepackage[T1]{fontenc}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+ \lstdefinestyle{labreport}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\title{Lab Exam Question 4-A}
+\date{25-04-2019}
+\author{\textbf{Muhammed Bilal A}\\\\ \textbf{Roll No :41} \\\\\textbf{TVE16CS042}\\}
+
+\usepackage{graphicx}
+\graphicspath{ {./} }
+\begin{titlepage}
+\title{\huge \textbf{Network Lab Exam}}
+
+\end{titlepage}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \setcounter{section}{0}
+    \section{Lab Exam Question 4-A}
+    \vspace{1 cm}
+    \subsection{Aim}
+        \paragraph{}
+A barbershop consists of a waiting room with 10 chairs, and the barber room containing 3 barber chairs, served by 3 barbers. If there are no customers to be served, the barbers goes to sleep. If at least one barber is sleeping, the customer looks at a sign, wakes up the barber who has been sleeping the longest, and sits in that barber's chair (after the barber has stood up). If all barbers are busy, the customer sits in a waiting-room chair, if one is available. Otherwise,the customer remains standing until a waiting-room chair becomes available. Customers keep track of their order, so the person sitting the longest is always the next customer to get a haircut.
+        \newline
+    \subsection{Theory}
+        \begin{itemize}
+            \item \textbf{Threads}:A thread is a line of execution of program which executes a part of a program.Threads share memory spaces with other threads,but each thread has its own registers and stack.A process can have multiple threads.
+            \item \textbf{Queue}:A fifo datastructure i.e the data that came first can be removed from the front of the list and the data which came recently will be the last element in the queue 
+        \end{itemize}
+    \subsection{Implementation}
+        \begin{itemize}
+         \item The problem is an application of the reader's-writer's problem.The Customer will act as a writer and is implemented as a thread.It will check if any barber is free.The barbers who are free are placed in a queue.So the barber who became free first,will be at the front of the queue.The barber who became free second,will be placed after the first barber.The customer will sit in the barber's seat who is in the front of the queue.If the queue is empty then there are no free barbers and the customer will check  the queue in a loop until there is an element in the queue.In this way customers are serviced in the order of their arrival until all the customers are serviced.
+        \end{itemize}
+    \subsection{Algorithm}
+        \begin{algorithm}[H]
+            \caption{Client Thread}
+            \begin{algorithmic}
+                \State Wait until the barber queue is not empty 
+                \State When the barber queue is not empty that means a barber is free.Sit in the barber's chair and remove the barber from the queue.
+                \State When the service of the barber is finished,put him back to the queue
+                \State Exit thread
+
+            \end{algorithmic}
+            \end{algorithm}
+         \begin{algorithm}[H]
+            \caption{Main Function}
+            \begin{algorithmic}
+                \State Put the customers into a queue as the customers arrives
+                \State Take the first three customer from queue and execute threads for the customer with callback client thread
+                \State When the threads finish executing,take the next three customers and repeat the above step 
+                \State When the customer queue is empty,exit the program
+            \end{algorithmic}
+            \end{algorithm}
+    \subsection{How to Run}
+    \begin{enumerate}
+          \item \textbf{g++ qn4-a.cpp -lpthread}
+        \item \textbf{./a.out}
+    \end{enumerate}
+      
+    \subsection{Output}
+            \textbf{Output 1}
+            \begin{verbatim}
+Hair cutting done by barber Hair cutting done by barber 1for customer 1
+Hair cutting done by barber 1for customer 3
+Hair cutting done by barber 2for customer 2
+0for customer 0
+Hair cutting done by barber 2for customer 4
+Hair cutting done by barber 0for customer 6
+Hair cutting done by barber 2for customer 7
+Hair cutting done by barber 0for customer 8
+Hair cutting done by barber 1for customer 9
+
+
+\end{verbatim}
+\textbf{Output 2}
+\begin{verbatim}
+Hair cutting done by barber Hair cutting done by barber 1for customer 1
+Hair cutting done by barber 02for customer 2for customer 0
+
+Hair cutting done by barber 1for customer 3
+Hair cutting done by barber 0for customer 4
+Hair cutting done by barber 2for customer 5
+Hair cutting done by barber 1for customer 6
+Hair cutting done by barber 0for customer 7
+Hair cutting done by barber 2for customer 8
+Hair cutting done by barber 1for customer 9
+
+\end{verbatim}
+\textbf{Output 3}
+\begin{verbatim}
+Hair cutting done by barber 0for customer 1
+Hair cutting done by barber Hair cutting done by barber 2for customer 3
+0for customer 0
+Hair cutting done by barber Hair cutting done by barber 1for customer 2
+0for customer 4
+Hair cutting done by barber 2for customer 5
+Hair cutting done by barber 0for customer 6
+Hair cutting done by barber 1for customer 7
+Hair cutting done by barber 0for customer 8
+Hair cutting done by barber 2for customer 9
+Hair cutting done by barber 0for customer 10
+Hair cutting done by barber 1for customer 11
+\end{verbatim}
+      
+    \subsection{Code}
+    \textbf{Program}
+    \lstinputlisting[language=C++,showstringspaces=false,style=labreport]{qn4-a.cpp}
+    \vspace{1 cm}
+\newpage    
+\section{Lab Exam Question 4-B}
+    \vspace{1 cm}
+    \subsection{Aim}
+        \paragraph{}
+Implement a TCP/UDP client and server, Your TCP or UDP client/server will communicate over the network and exchange data.The server will start in passive mode listening on a specified port for a transmission from a client. Separately, the client will be started and will contact the server on a given IP address and port number that must be entered via the command line. The client will pass the server a Square Matrix of size N*N.
+        \newline
+    \subsection{Theory}
+        \begin{itemize}
+            \item \textbf{Server}: A program which services requests from 'client' processes.Multiple clients can connect to a server at a time.Usually threads are created for each client connected to the server to service their requests.
+            \item \textbf{Client}:A program which requests service from a 'server' process.A client will send some data over a TCP/UDP connection to the server and the server will create a thread to process the request of the client.
+        \end{itemize}
+    \subsection{Implementation}
+        \begin{itemize}
+         \item The problem of printing the spiral is solved using 4 pointers-top,right,bottom,left which points to the four corners of the matrix.The pointers are modified after each cycle in the spiral.The client sends a matrix over a TCP connection to the server.The server uses the above mentioned algorithm to generate the spiral.The server then sends back the spiral to the client 
+        \end{itemize}
+    \subsection{Algorithm}
+        \begin{algorithm}[H]
+            \caption{Spiral Generation}
+            \begin{algorithmic}
+               \State initialise top = left = 0
+               \State initialise bottom = right = 0
+               \State initialise spiral = []
+               \If{N\%2 == 1}
+                    \State N = int(N/2)+1
+                \Else
+                    \State N = int(N/2)
+                \EndIf
+                \For{i in (0,N)}
+                    \For{j in (left,right)}
+                        \State spiral.append(mat[top][j])
+                    \EndFor
+                    \State top+=1
+                    \For{j in (top,bottom)}
+                        \State spiral.append(mat[j][right-1])
+                    \EndFor
+                    \State right-=1
+                    \For{j in (right-1,left)}
+                        \State spiral.append(mat[bottom-1][j])
+                    \EndFor
+                    \State bottom-=1
+                    \For{j in (bottom,top-1)}
+                        \State spiral.append(mat[j][left])
+                    \EndFor
+                    left+=1
+                \EndFor
+            
+            \end{algorithmic}
+            \end{algorithm}
+         \begin{algorithm}[H]
+            \caption{Server}
+            \begin{algorithmic}
+                \State Create a TCP socket
+                \State Bind the socket to and address,port
+                \State Listen for connections 
+                \State When a client connects,create a thread for the client.The thread accepts a matrix from the client and sends it to the spiral generation function which returns the spiral.Send the spiral back to the client
+                \State Stop the server when no more clients are active
+            \end{algorithmic}
+            \end{algorithm}
+    \subsection{How to Run}
+    \begin{enumerate}
+          \item Run \textbf{python3 qn4-b\_server.py} on a terminal
+        \item Run \textbf{python3 qn4-b\_client.py} on another terminal
+    \end{enumerate}
+      
+    \subsection{Output}
+            \textbf{Output 1}
+            \begin{verbatim}
+Enter the size of the matrix :3
+1
+2
+3
+4
+5
+6
+7
+8
+9
+[1, 2, 3, 6, 9, 8, 7, 4, 5]
+        \end{verbatim}
+        \textbf{Output 2}
+        \begin{verbatim}
+Enter the size of the matrix :4
+1
+2
+3
+4
+5
+6
+7
+8
+9
+1
+2
+3
+4
+5
+6
+7
+[1, 2, 3, 4, 8, 3, 7, 6, 5, 4, 9, 5, 6, 7, 2, 1]    
+        \end{verbatim}
+      \textbf{Output 3}
+      \begin{verbatim}
+Enter the size of the matrix :4
+1
+2
+3
+4
+5
+6
+7
+8
+9
+8
+7
+6
+5
+4
+3
+2
+[1, 2, 3, 4, 8, 6, 2, 3, 4, 5, 9, 5, 6, 7, 7, 8]  
+      \end{verbatim}
+    \subsection{Code}
+    \textbf{Server}
+    \lstinputlisting[language=C++,showstringspaces=false,style=labreport]{qn4-b_server.py}
+    \vspace{1 cm}
+    \textbf{Client}
+    \lstinputlisting[language=C++,showstringspaces=false,style=labreport]{qn4-b_client.py}
+    \vspace{1 cm}
+ 
+
+         
+\end{document}

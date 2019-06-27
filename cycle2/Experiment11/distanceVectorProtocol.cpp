@@ -1,4 +1,5 @@
 #include<iostream>
+#include<climits>
 using namespace std;
 
 
@@ -6,12 +7,13 @@ int main(){
     int N;
     cout<<"Enter the size of the matrix \n";
     cin>>N;
-    int cost[N][N]={0};
-    int distance[N][N] = {0};
+    int cost[N][N];
+    int distance[N][N] = {INT_MAX};
     cout<<"Enter the cost matrix \n";
     for(int i = 0;i<N;i++)
         for(int j = 0;j<N;j++){
             cin>>cost[i][j];
+            if(cost[i][j]!=INT_MAX)
             distance[i][j] = cost[i][j];
         }
     for(int i = 0;i<N;i++)   
